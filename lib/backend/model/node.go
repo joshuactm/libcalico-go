@@ -52,6 +52,7 @@ type Node struct {
 	BGPIPv4Net  *net.IPNet
 	BGPIPv6Net  *net.IPNet
 	BGPASNumber *numorstring.ASNumber
+	BGPPassword string
 	OrchRefs    []OrchRef `json:"orchRefs,omitempty"`
 }
 

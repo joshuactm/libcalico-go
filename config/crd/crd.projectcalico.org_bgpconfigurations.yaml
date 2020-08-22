@@ -75,6 +75,10 @@ spec:
                 description: 'NodeToNodeMeshEnabled sets whether full node to node
                   BGP mesh is enabled. [Default: true]'
                 type: boolean
+              password:
+                description: 'Password is the BGP password used by a node. [Default:
+                  nil]'
+                type: string
               prefixAdvertisements:
                 description: PrefixAdvertisements contains per-prefix advertisement
                   configuration.

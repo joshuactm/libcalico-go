@@ -70,6 +70,7 @@ type BGPPeerMetadata struct {
 type BGPPeerSpec struct {
 	// The AS Number of the peer.
 	ASNumber numorstring.ASNumber `json:"asNumber"`
+	Password string `json:"password"`
 }
 
 // NewBGPPeer creates a new (zeroed) BGPPeer struct with the TypeMetadata initialised to the current

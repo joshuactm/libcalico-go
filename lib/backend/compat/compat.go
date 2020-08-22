@@ -492,6 +492,15 @@ func (c *ModelAdaptor) getNodeSubcomponents(ctx context.Context, nk model.NodeKe
 		return err
 	}
 
+	if component, err = c.client.Get(ctx, model.NodeBGPConfigKey{Nodename: nk.Hostname, Name: "password"}, ""); err == nil {
+		strval = component.Value.(string)
+		if strval != "" {
+			nv.BGPPassword = strval
+		}
+	} else if _, ok := err.(errors.ErrorResourceDoesNotExist); !ok {
+		return err
+	}
+
 	if component, err := c.client.Get(ctx, model.OrchRefKey{Hostname: nk.Hostname}, ""); err == nil {
 		nv.OrchRefs = component.Value.([]model.OrchRef)
 	}
@@ -624,6 +633,22 @@ func toNodeComponents(d *model.KVPair) (primary *model.KVPair, optional []*model
 			},
 		})
 	}
+	if n.BGPPassword != "" {
+		optional = append(optional, &model.KVPair{
+			Key: model.NodeBGPConfigKey{
+				Nodename: nk.Hostname,
+				Name:     "password",
+			},
+			Value: n.BGPPassword,
+		})
+	} else {
+		optional = append(optional, &model.KVPair{
+			Key: model.NodeBGPConfigKey{
+				Nodename: nk.Hostname,
+				Name:     "password",
+			},
+		})
+	}
 	if n.BGPIPv4Net != nil {
 		optional = append(optional, &model.KVPair{
 			Key: model.NodeBGPConfigKey{
@@ -698,6 +723,12 @@ func toNodeDeleteComponents(nk model.NodeKey) (primary *model.KVPair, optional [
 		{
 			Key: model.NodeBGPConfigKey{
 				Nodename: nk.Hostname,
+				Name:     "password",
+			},
+		},
+		{
+			Key: model.NodeBGPConfigKey{
+				Nodename: nk.Hostname,
 				Name:     "network_v4",
 			},
 		},
@@ -723,6 +754,8 @@ func toDatastoreGlobalBGPConfigKey(key model.GlobalBGPConfigKey) model.GlobalBGP
 	switch key.Name {
 	case "AsNumber":
 		key = model.GlobalBGPConfigKey{Name: "as_num"}
+	case "Password":
+		key = model.GlobalBGPConfigKey{Name: "password"}
 	case "LogLevel":
 		key = model.GlobalBGPConfigKey{Name: "loglevel"}
 	case "NodeMeshEnabled":
@@ -737,6 +770,8 @@ func toDatastoreGlobalBGPConfigList(l model.GlobalBGPConfigListOptions) model.Gl
 	switch l.Name {
 	case "AsNumber":
 		l = model.GlobalBGPConfigListOptions{Name: "as_num"}
+	case "Password":
+		l = model.GlobalBGPConfigListOptions{Name: "password"}
 	case "LogLevel":
 		l = model.GlobalBGPConfigListOptions{Name: "loglevel"}
 	case "NodeMeshEnabled":
@@ -751,6 +786,8 @@ func fromDatastoreGlobalBGPKey(key model.GlobalBGPConfigKey) model.GlobalBGPConf
 	switch key.Name {
 	case "as_num":
 		key = model.GlobalBGPConfigKey{Name: "AsNumber"}
+	case "password":
+		key = model.GlobalBGPConfigKey{Name: "Password"}
 	case "loglevel":
 		key = model.GlobalBGPConfigKey{Name: "LogLevel"}
 	case "node_mesh":

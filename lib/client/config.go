@@ -59,6 +59,8 @@ type ConfigInterface interface {
 	GetNodeToNodeMesh() (bool, error)
 	SetGlobalASNumber(numorstring.ASNumber) error
 	GetGlobalASNumber() (numorstring.ASNumber, error)
+	SetGlobalBGPPassword(string) error
+	GetGlobalBGPPassword() (string, error)
 	SetGlobalIPIP(bool) error
 	GetGlobalIPIP() (bool, error)
 	SetNodeIPIPTunnelAddress(string, *net.IP) error
@@ -131,7 +133,7 @@ func (c *config) SetGlobalASNumber(asNumber numorstring.ASNumber) error {
 	return err
 }
 
-// SetGlobalASNumber gets the global AS Number used by the BGP agent running
+// GetGlobalASNumber gets the global AS Number used by the BGP agent running
 // on each node.  See SetGlobalASNumber for more details.
 func (c *config) GetGlobalASNumber() (numorstring.ASNumber, error) {
 	if s, err := c.getValue(model.GlobalBGPConfigKey{Name: "AsNumber"}); err != nil {
@@ -142,6 +144,29 @@ func (c *config) GetGlobalASNumber() (numorstring.ASNumber, error) {
 		return 0, err
 	} else {
 		return asn, nil
+	}
+}
+
+// SetGlobalBGPPassword sets the global BGP password used by the BGP agent running
+// on each node.  This may be overridden by an explicitly configured value in
+// the node resource.
+func (c *config) SetGlobalBGPPassword(password string) error {
+	_, err := c.c.Backend.Apply(context.Background(), &model.KVPair{
+		Key:   model.GlobalBGPConfigKey{Name: "Password"},
+		Value: password,
+	})
+	return err
+}
+
+// GetGlobalBGPPassword gets the global BGP Password used by the BGP agent running
+// on each node.  See SetGlobalBGPPassword for more details.
+func (c *config) GetGlobalBGPPassword() (string, error) {
+	if s, err := c.getValue(model.GlobalBGPConfigKey{Name: "Password"}); err != nil {
+		return "", err
+	} else if s == nil {
+		return "", nil
+	} else {
+		return *s, nil
 	}
 }
 

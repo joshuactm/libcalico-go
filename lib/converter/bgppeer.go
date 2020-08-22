@@ -60,6 +60,7 @@ func (p BGPPeerConverter) ConvertAPIToKVPair(a unversioned.Resource) (*model.KVP
 		Value: &model.BGPPeer{
 			PeerIP: ap.Metadata.PeerIP,
 			ASNum:  ap.Spec.ASNumber,
+			Password:  ap.Spec.Password,
 		},
 	}
 
@@ -84,6 +85,7 @@ func (p BGPPeerConverter) ConvertKVPairToAPI(d *model.KVPair) (unversioned.Resou
 
 	backendBGPPeer := d.Value.(*model.BGPPeer)
 	apiBGPPeer.Spec.ASNumber = backendBGPPeer.ASNum
+	apiBGPPeer.Spec.Password = backendBGPPeer.Password
 
 	return apiBGPPeer, nil
 }

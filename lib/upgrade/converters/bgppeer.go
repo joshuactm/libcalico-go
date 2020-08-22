@@ -50,8 +50,9 @@ func (bp BGPPeer) APIV1ToBackendV1(rIn unversioned.Resource) (*model.KVPair, err
 	d := model.KVPair{
 		Key: k,
 		Value: &model.BGPPeer{
-			PeerIP: ap.Metadata.PeerIP,
-			ASNum:  ap.Spec.ASNumber,
+			PeerIP:   ap.Metadata.PeerIP,
+			ASNum:    ap.Spec.ASNumber,
+			Password: ap.Spec.Password,
 		},
 	}
 
@@ -97,6 +98,7 @@ func (bp BGPPeer) BackendV1ToAPIV3(kvp *model.KVPair) (Resource, error) {
 	r.Spec = apiv3.BGPPeerSpec{
 		PeerIP:   peer.PeerIP.String(),
 		ASNumber: peer.ASNum,
+		Password: peer.Password,
 	}
 
 	switch kvp.Key.(type) {

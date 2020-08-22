@@ -204,6 +204,9 @@ type BGPPeer struct {
 	// converts large uints to float e notation which breaks the BIRD
 	// configuration.
 	ASNum numorstring.ASNumber `json:"as_num,string"`
+
+	// Password is the password of the BGP peer.
+	Password string `json:"password,string"`
 }
 
 func extractIPAndPort(ipPort string) ([]byte, uint16) {

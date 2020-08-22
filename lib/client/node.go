@@ -159,6 +159,7 @@ func (h *nodes) convertAPIToKVPair(a unversioned.Resource) (*model.KVPair, error
 			v.BGPIPv6Net = an.Spec.BGP.IPv6Address.Network()
 		}
 		v.BGPASNumber = an.Spec.BGP.ASNumber
+		v.BGPPassword = an.Spec.BGP.Password
 	}
 
 	for _, orchRef := range an.Spec.OrchRefs {
@@ -184,6 +185,7 @@ func (h *nodes) convertKVPairToAPI(d *model.KVPair) (unversioned.Resource, error
 	if bv.BGPIPv4Addr != nil || bv.BGPIPv6Addr != nil {
 		apiNode.Spec.BGP = &api.NodeBGPSpec{
 			ASNumber: bv.BGPASNumber,
+			Password: bv.BGPPassword,
 		}
 
 		// If the backend has an IPv4 address then fill in the IPv4Address

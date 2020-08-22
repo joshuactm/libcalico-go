@@ -54,6 +54,9 @@ spec:
                 description: Selector for the nodes that should have this peering.  When
                   this is set, the Node field must be empty.
                 type: string
+              password:
+                description: The BGP password of the peer.
+                type: string
               peerIP:
                 description: The IP address of the peer followed by an optional port
                   number to peer with. If port number is given, format should be `[<IPv6>]:port`

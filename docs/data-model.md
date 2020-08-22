@@ -709,25 +709,26 @@ specific to the host.
 
 The configuration for the global BGP peers is stored at
 
-    /calico/v1/config/bgp_peer_v4/<BGP peer IPv4 address>
+    /calico/bgp/v1/global/peer_v4
 
 and
 
-    /calico/v1/config/bgp_peer_v6/<BGP peer IPv6 address>
+    /calico/bgp/v1/config/peer_v6
 
 
 The configuration for the host node specific BGP peers is stored at
 
-    /calico/v1/host/<hostname>/bgp_peer_v4/<BGP peer IPv4 address>
+    /calico/bgp/v1/host/<hostname>/peer_v4/<BGP peer IPv4 address>
 
 and
 
-    /calico/v1/host/<hostname>/bgp_peer_v6/<BGP peer IPv6 address>
+    /calico/bgp/v1/host/<hostname>/peer_v6/<BGP peer IPv6 address>
 
 In all cases, the data is a JSON blob in the form:
 
     {
       "ip": "IP address of BGP Peer",
+      "password": "The password for BGP Peer",
       "as_num": "The AS Number of the peer"
     }
 

@@ -51,6 +51,8 @@ type BGPPeerSpec struct {
 	PeerIP string `json:"peerIP" validate:"omitempty,IP:port"`
 	// The AS Number of the peer.
 	ASNumber numorstring.ASNumber `json:"asNumber"`
+	// The BGP password of the peer.
+	Password string `json:"password,omitempty" validate:"omitempty"`
 	// Selector for the nodes that should have this peering.  When this is set, the Node
 	// field must be empty.
 	NodeSelector string `json:"nodeSelector,omitempty" validate:"omitempty,selector"`

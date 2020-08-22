@@ -84,6 +84,10 @@ type NodeBGPSpec struct {
 	// default value will be used.
 	ASNumber *numorstring.ASNumber `json:"asNumber,omitempty"`
 
+	// The BGP Password of the node.  If this is not specified, the global
+	// default value will be used if set.
+	Password string `json:"password,omitempty"`
+
 	// IPv4Address is the IPv4 address and network of this node.  At least
 	// one of the IPv4 and IPv6 addresses should be specified.
 	IPv4Address *net.IPNet `json:"ipv4Address,omitempty" validate:"omitempty"`

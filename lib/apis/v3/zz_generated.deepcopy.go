@@ -142,6 +142,9 @@ func (in *BGPConfigurationSpec) DeepCopyInto(out *BGPConfigurationSpec) {
 		*out = new(numorstring.ASNumber)
 		**out = **in
 	}
+	if in.Password != "" {
+		out.Password = string([]byte(in.Password))
+	}
 	if in.ServiceExternalIPs != nil {
 		in, out := &in.ServiceExternalIPs, &out.ServiceExternalIPs
 		*out = make([]ServiceExternalIPBlock, len(*in))
@@ -1966,6 +1969,9 @@ func (in *NodeBGPSpec) DeepCopyInto(out *NodeBGPSpec) {
 		in, out := &in.ASNumber, &out.ASNumber
 		*out = new(numorstring.ASNumber)
 		**out = **in
+	}
+	if in.Password != "" {
+		out.Password = string([]byte(in.Password))
 	}
 	return
 }

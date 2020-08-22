@@ -43,6 +43,7 @@ const (
 	nodeBgpVXLANTunnelMACAddrAnnotation  = "projectcalico.org/VXLANTunnelMACAddr"
 	nodeBgpIpv6AddrAnnotation            = "projectcalico.org/IPv6Address"
 	nodeBgpAsnAnnotation                 = "projectcalico.org/ASNumber"
+	nodeBgpPasswordAnnotation            = "projectcalico.org/Password"
 	nodeBgpCIDAnnotation                 = "projectcalico.org/RouteReflectorClusterID"
 	nodeK8sLabelAnnotation               = "projectcalico.org/kube-labels"
 	nodeWireguardIpv4IfaceAddrAnnotation = "projectcalico.org/IPv4WireguardInterfaceAddr"
@@ -233,6 +234,7 @@ func K8sNodeToCalico(k8sNode *kapiv1.Node, usePodCIDR bool) (*model.KVPair, erro
 			bgpSpec.ASNumber = &asn
 		}
 	}
+	bgpSpec.Password = annotations[nodeBgpPasswordAnnotation]
 
 	// Initialize the wireguard spec. We'll include it if it contains non-zero data.
 	wireguardSpec := &apiv3.NodeWireguardSpec{}
@@ -335,6 +337,7 @@ func mergeCalicoNodeIntoK8sNode(calicoNode *apiv3.Node, k8sNode *kapiv1.Node) (*
 		delete(k8sNode.Annotations, nodeBgpIpv4IPIPTunnelAddrAnnotation)
 		delete(k8sNode.Annotations, nodeBgpIpv6AddrAnnotation)
 		delete(k8sNode.Annotations, nodeBgpAsnAnnotation)
+		delete(k8sNode.Annotations, nodeBgpPasswordAnnotation)
 		delete(k8sNode.Annotations, nodeBgpCIDAnnotation)
 	} else {
 		// If the BGP spec is not nil, then handle each field within the BGP spec individually.
@@ -360,6 +363,12 @@ func mergeCalicoNodeIntoK8sNode(calicoNode *apiv3.Node, k8sNode *kapiv1.Node) (*
 			k8sNode.Annotations[nodeBgpAsnAnnotation] = calicoNode.Spec.BGP.ASNumber.String()
 		} else {
 			delete(k8sNode.Annotations, nodeBgpAsnAnnotation)
+		}
+
+		if calicoNode.Spec.BGP.Password != "" {
+			k8sNode.Annotations[nodeBgpPasswordAnnotation] = calicoNode.Spec.BGP.Password
+		} else {
+			delete(k8sNode.Annotations, nodeBgpPasswordAnnotation)
 		}
 
 		if calicoNode.Spec.BGP.RouteReflectorClusterID != "" {

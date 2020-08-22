@@ -130,6 +130,13 @@ func (r bgpConfigurations) ValidateDefaultOnlyFields(res *apiv3.BGPConfiguration
 			})
 		}
 
+		if res.Spec.Password != "" {
+			errFields = append(errFields, cerrors.ErroredField{
+				Name:   "BGPConfiguration.Spec.Password",
+				Reason: "Cannot set Password on a non default BGP Configuration.",
+			})
+		}
+
 		if res.Spec.ServiceExternalIPs != nil && len(res.Spec.ServiceExternalIPs) > 0 {
 			errFields = append(errFields, cerrors.ErroredField{
 				Name:   "BGPConfiguration.Spec.ServiceExternalIPs",

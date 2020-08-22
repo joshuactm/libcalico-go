@@ -57,6 +57,7 @@ func (n Node) APIV1ToBackendV1(a unversioned.Resource) (*model.KVPair, error) {
 			v.BGPIPv6Net = an.Spec.BGP.IPv6Address.Network()
 		}
 		v.BGPASNumber = an.Spec.BGP.ASNumber
+		v.BGPPassword = an.Spec.BGP.Password
 	}
 
 	for _, orchRef := range an.Spec.OrchRefs {
@@ -107,6 +108,7 @@ func (_ Node) BackendV1ToAPIV3(d *model.KVPair) (Resource, error) {
 	if bv.BGPIPv4Addr != nil || bv.BGPIPv6Addr != nil {
 		apiNode.Spec.BGP = &apiv3.NodeBGPSpec{
 			ASNumber: bv.BGPASNumber,
+			Password: bv.BGPPassword,
 		}
 
 		// If the backend has an IPv4 address then fill in the IPv4Address
